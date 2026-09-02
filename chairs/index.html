@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Some nice chairs</title>
+  <meta name="description" content="Field notes on building a gallery of 25 designer chairs and a room you can furnish with them.">
+  <script>
+    // Apply the stored theme before first paint, so the page never flashes the
+    // other one. Everything else about the toggle lives in site.js.
+    try { var t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t } catch (e) {}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;1,400&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main>
+    <a class="crumb" href="/">Index</a>
+    <article>
+      <header class="masthead">
+        <h1>Some nice chairs</h1>
+        <span class="dateline">Field notes, July 2026</span>
+      </header>
+
+      <div class="standfirst">
+        <p>Twenty-five chairs from 1925 to 2025, and a room you can furnish with them.</p>
+        <p class="meta"><a href="https://nicechairs.vercel.app/">Visit the site</a></p>
+      </div>
+
+      <p>I had a note on my phone called chairs. It ran to about forty lines of designer, year and link, and past a certain length a list like that stops being something you read and becomes something you scroll past. So I built the version that answers questions instead.</p>
+
+      <p>Twenty-five chairs, from Breuer's Wassily in 1925 to a Knoll lounge released last year. Each one carries a designer, a maker, a year, a price, a construction, and two scores out of five.</p>
+
+      <h2>Every chair has a verb</h2>
+
+      <p>The data has a field called motion. Its values are swivel, rock, squish, settle and recline. It started as a way to make each chair's hover animation match the object rather than applying the same lift to everything, and it ended up the most useful column in the set.</p>
+
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Verb</th><th>What the chair does</th><th>For instance</th></tr></thead>
+          <tbody>
+            <tr><td>squish</td><td>Takes your shape and keeps it for a second after you leave</td><td>Togo, Camaleonda</td></tr>
+            <tr><td>settle</td><td>Does not move, and you arrive at a fixed position</td><td>Wishbone, Barcelona</td></tr>
+            <tr><td>rock</td><td>Has a hinge or a sled and answers a shift in weight</td><td>Siesta, LC4</td></tr>
+            <tr><td>recline</td><td>Goes back on purpose, in stages</td><td>LC1, Maralunga</td></tr>
+            <tr><td>swivel</td><td>Turns you toward whatever else is in the room</td><td>Eames Lounge</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Which verb a chair does tells you more about living with it than its price does. A Togo squishes and a Wishbone settles, and if you know that about both of them you already know which one belongs where.</p>
+
+      <h2>The scores are estimates and the site says so</h2>
+
+      <p>Comfort and durability run one to five and they are my reasoned guesses. I have sat in maybe a third of these. The data file opens with a comment saying exactly that, and I left the caveat visible rather than tidying it away, because the alternative is a number that reads like a measurement when it is an opinion with a decimal point.</p>
+
+      <h2>The room is the point</h2>
+
+      <p>The gallery is only the index. The room is a floor line, a back wall and a pendant lamp, and you pull chairs into it from the gallery. That is the question I actually had. Not <em>is this a good chair</em>, which the internet has already answered several thousand times, but <em>do these two belong in the same room</em>, which nobody can answer for you.</p>
+
+      <p>It is desktop only. The site says so in one line at the top rather than collapsing into a worse version of itself on a phone. Arranging furniture with a thumb is not a smaller version of arranging furniture with a cursor, it is a different and worse thing, and pretending otherwise would have cost more than the traffic it saved.</p>
+
+      <h2>Hearts are everyone's</h2>
+
+      <p>Liking a chair writes to a shared store, so the count under each one belongs to every visitor. A random client id in local storage remembers which chairs are yours. It is the smallest amount of backend a static site can have and still know something, and it turned the page from a list I published into a list that answers back.</p>
+
+      <h2>The top of this market is not selling chairs</h2>
+
+      <p>Prices span a factor of fifty-seven, from $1,320 for a Wishbone to $75,000 for Rogan Gregory's Infinity lounge, and four of the most expensive pieces are listed as available on request rather than at a number. Sorting by price is the fastest way to see the line where furniture stops being furniture. Everything above it is sculpture that will hold a person.</p>
+
+      <h2>What I would change</h2>
+
+      <p>The room saves nothing. Close the tab and the arrangement is gone, which is fine for a toy and wrong for something people came back to. The likes already prove a shared store is one file away. And the comfort scores want a second column for who is sitting: the Croissant chair is a five if you are my height and a three if you are not, and one number cannot hold both.</p>
+    </article>
+  </main>
+
+  <footer>
+    <p><a href="/">Back to the index</a></p>
+  </footer>
+  <script src="/site.js" defer></script>
+</body>
+</html>

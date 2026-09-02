@@ -4,7 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Jennifer Fang</title>
-  <meta name="description" content="Jennifer Fang. Side projects, small tools, and things I have made.">
+  <meta name="description" content="Jennifer Fang. Design engineer in the Bay Area. Tools, collections, and field notes on both.">
+  <script>
+    // Apply the stored theme before first paint, so the page never flashes the
+    // other one. Everything else about the toggle lives in site.js.
+    try { var t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t } catch (e) {}
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;1,400&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
@@ -14,58 +19,56 @@
   <main>
     <header class="masthead">
       <h1>Jennifer Fang</h1>
-      <span class="updated">Updated September 2, 2026</span>
+      <span class="dateline">Updated September 2026</span>
     </header>
 
-    <p>I was born in Guangzhou, grew up in Austin, and have since lived in the Bay Area, Chicago and New York.</p>
+    <p>I was born in Guangzhou, grew up in Austin, and studied data science at Berkeley. I have lived in the Bay Area, Chicago and New York.</p>
 
-    <p>I currently work on <a href="https://tryscope.app">Scope</a>. I studied data science at <a href="https://www.berkeley.edu/">UC Berkeley</a>, with detours into startups and design.</p>
+    <p>Through August 2026 I was the founding design engineer at <a href="https://tryscope.app">Scope</a>, a YC company building observability for AI agents. The work was agent experience: what it is actually like to hand a task to Claude Code or Codex or Cursor, and what it costs you when that goes sideways. I sat with more than twenty engineering teams and kept hearing the same two things. A reasoning trace becomes unreadable at exactly the length where you need to read it, and a tool call that failed looks identical to one that is merely slow. Those conversations turned into what the product collects. I also built the marketing pages, the onboarding, and the internal tools we ran demos on. Half the people who came to a launch event became design partners.</p>
 
-    <p>Outside of work I care about art, furniture and interiors, and MMA. Most of what is below started as a way to keep track of something I like.</p>
+    <p>Before that I did supply chain analysis at Tesla and Nissan, and prompt engineering and consulting at IBM, where I still consult. I run <a href="http://luma.com/projecte">Project E</a>, a community of about 1,500 founders, operators and designers, and the thirty-odd dinners and run clubs it has put on across four cities. I was president of the Cal boxing club for two years, which taught me more about running a thing than any of the rest of it did.</p>
 
-    <p>You can find me on <a href="https://x.com/jenfang">X</a> and <a href="https://instagram.com/thejenniferfang">Instagram</a>, or reach me via <a href="mailto:thejenniferfang@gmail.com">email</a>.</p>
+    <p>Everything below started the same way. A note on my phone about something I liked, kept until the note stopped being readable, and then a site that made it readable again. Two of them turned into tools.</p>
 
-    <h2>Projects</h2>
+    <p>Reach me by <a href="mailto:thejenniferfang@gmail.com">email</a>, or find me on <a href="https://x.com/jenfang">X</a> and <a href="https://instagram.com/thejenniferfang">Instagram</a>.</p>
+
+    <h2>Tools</h2>
+    <ul class="projects">
+      <li>
+        <span class="title">ui-agent<span class="wip">in progress</span></span>
+        <span class="when">July 2026</span>
+        <p class="blurb">A dev-only panel that edits design tokens in the browser and writes the change back to your stylesheet. It also audits alignment and type, and keeps the values you rejected. <a href="/ui-agent">Field notes</a></p>
+      </li>
+      <li>
+        <span class="title">artistwiki<span class="wip">in progress</span></span>
+        <span class="when">August 2026</span>
+        <p class="blurb">A browser extension for auction catalogues. Hover a lot to see who made it and what their comparable work has actually sold for. It is the second answer to a question whose first answer failed. <a href="/artistwiki">Field notes</a></p>
+      </li>
+    </ul>
+
+    <h2>Collections</h2>
     <ul class="projects">
       <li>
         <span class="title"><a href="https://bayburrito.vercel.app/">Bay Burrito Challenge</a></span>
         <span class="when">August 2026</span>
-        <p class="blurb">Every Bay Area burrito, eaten, ranked, and written up by hand.</p>
-      </li>
-      <li>
-        <span class="title"><a href="https://fluffiemorning.vercel.app/">Fluffie Morning</a></span>
-        <span class="when">July 2026</span>
-        <p class="blurb">Bay Area bakeries and coffee, eaten and ranked by hand. Pick a side.</p>
+        <p class="blurb">A tier list and a map of Bay Area burritos, built from a taxonomy of someone else's video archive. <a href="/burritos">Field notes</a></p>
       </li>
       <li>
         <span class="title"><a href="https://nicechairs.vercel.app/">Some nice chairs</a></span>
         <span class="when">July 2026</span>
-        <p class="blurb">A personal collection of favorite designer chairs, with a room you can furnish yourself. Best on a computer.</p>
+        <p class="blurb">Twenty-five chairs from 1925 to 2025, and a room you can furnish with them to see whether any two of them get along. <a href="/chairs">Field notes</a></p>
       </li>
       <li>
         <span class="title"><a href="https://fun-mugs.vercel.app/">Mug Shelf</a></span>
         <span class="when">July 2026</span>
-        <p class="blurb">A personal index of good ceramic mugs.</p>
-      </li>
-    </ul>
-
-    <h2>In progress</h2>
-    <ul class="projects">
-      <li>
-        <span class="title"><a href="/ui-agent">ui-agent</a><span class="wip">work in progress</span></span>
-        <span class="when">July 2026</span>
-        <p class="blurb">A dev-only panel for editing design tokens live in the browser and writing the change back to source. It also audits alignment and type, and hands the findings to a coding agent. <a href="https://github.com/thejenniferfang/ui-agent">Source on GitHub</a>.</p>
-      </li>
-      <li>
-        <span class="title">artistwiki<span class="wip">work in progress</span></span>
-        <span class="when">August 2026</span>
-        <p class="blurb">A Chrome extension for auction sites. Hover any lot to see who made it and what their comparable work has actually sold for. It grew out of <a href="https://github.com/thejenniferfang/artscan">artscan</a>, an experiment in valuing art from images that found the images do not help.</p>
+        <p class="blurb">Thirty-six mugs across fourteen makers, cut out one at a time, arrangeable on a shelf you can export. <a href="/mugs">Field notes</a></p>
       </li>
     </ul>
   </main>
 
   <footer>
-    <p>Jennifer Fang, 2026. <a href="https://jenniferfang.com">The old site</a> is still up for now.</p>
+    <p>Jennifer Fang, 2026. <a href="https://jenniferfang.com">The old site</a> is still up while this one absorbs it.</p>
   </footer>
+  <script src="/site.js" defer></script>
 </body>
 </html>

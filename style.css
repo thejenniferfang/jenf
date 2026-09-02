@@ -1,7 +1,7 @@
 /* jenf.vercel.app
-   Type and color pulled from jenniferfang.com: Big Caslon for display,
-   Space Grotesk for reading. Charcoal and white, one blue, one red.
-   No monospace outside code blocks. Nothing uppercased. */
+   Type from jenniferfang.com: Big Caslon for display, Space Grotesk for reading.
+   One blue, International Klein #002FA7, on white. Everything else is ink on paper.
+   No monospace outside code. Nothing uppercased. Nothing greyed to recede. */
 
 :root {
   --serif: "Big Caslon", "Libre Caslon Text", "Iowan Old Style", Georgia, serif;
@@ -9,12 +9,12 @@
   --sans: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
   --code: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
-  --paper: #fdfcf8;
-  --ink: #111111;
-  --blue: #002fa7;      /* International Klein Blue */
-  --red: #870000;       /* the red from jenniferfang.com */
-  --rule: rgba(17, 17, 17, 0.14);
-  --code-bg: rgba(17, 17, 17, 0.05);
+  --paper: #fbfaf7;
+  --ink: #121212;
+  --accent: #002fa7;          /* International Klein Blue */
+  --on-accent: #ffffff;
+  --rule: rgba(18, 18, 18, 0.14);
+  --code-bg: rgba(18, 18, 18, 0.05);
 
   --measure: 36rem;
 
@@ -31,13 +31,27 @@
   --type-small: 14px;
 }
 
+/* Dark is the charcoal from jenniferfang.com, lightened enough to read a page of
+   text on. Klein blue is unreadable at this contrast, so the accent lifts to a
+   tint of it and the blue itself sits out until the page is white again. */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #353535;   /* jenniferfang.com body */
-    --ink: #ffffff;
+  :root:not([data-theme="light"]) {
+    --paper: #232326;
+    --ink: #f4f3ef;
+    --accent: #9db0ff;
+    --on-accent: #16161a;
     --rule: rgba(255, 255, 255, 0.2);
     --code-bg: rgba(255, 255, 255, 0.07);
   }
+}
+
+:root[data-theme="dark"] {
+  --paper: #232326;
+  --ink: #f4f3ef;
+  --accent: #9db0ff;
+  --on-accent: #16161a;
+  --rule: rgba(255, 255, 255, 0.2);
+  --code-bg: rgba(255, 255, 255, 0.07);
 }
 
 * { box-sizing: border-box; }
@@ -58,7 +72,7 @@ body {
   font-feature-settings: "tnum" 1;
 }
 
-::selection { background: var(--blue); color: #fff; }
+::selection { background: var(--accent); color: var(--on-accent); }
 
 main {
   max-width: var(--measure);
@@ -66,77 +80,79 @@ main {
   padding: var(--space-page) 1rem 4rem;
 }
 @media (max-width: 768px) {
-  main { padding: 2.5rem 1.25rem 3rem; }
+  main { padding: 3rem 1.25rem 3rem; }
 }
 
 h1, h2, h3 { font-weight: 400; margin: 0; }
 
 h1 {
   font-family: var(--serif);
-  font-size: 2rem;
+  font-size: 32px;
   line-height: 1.1;
   letter-spacing: -0.01em;
 }
 
 h2 {
   font-family: var(--serif);
-  font-size: 1.5rem;
+  font-size: 24px;
   line-height: 1.2;
   margin-top: var(--space-section);
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 h3 {
   font-size: var(--type-body);
   font-weight: 500;
-  margin-top: 2.25rem;
-  margin-bottom: 0.5rem;
+  margin-top: 2rem;
+  margin-bottom: 0.4rem;
 }
 
 p { margin: 0 0 1.1em; }
 p:last-child { margin-bottom: 0; }
 
 em, i { font-family: var(--serif-italic); font-style: italic; }
+strong, b { font-weight: 500; }
 
 a {
-  color: var(--blue);
+  color: var(--accent);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.18em;
-  text-decoration-color: color-mix(in srgb, var(--blue) 45%, transparent);
-  transition: color var(--motion-hover) ease, background-color var(--motion-hover) ease, box-shadow var(--motion-hover) ease;
+  text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  transition: color var(--motion-hover) ease, background-color var(--motion-hover) ease,
+    box-shadow var(--motion-hover) ease;
 }
 a:hover {
-  color: #fff;
-  background: var(--blue);
+  color: var(--on-accent);
+  background: var(--accent);
   text-decoration: none;
-  box-shadow: 0 0 0 3px var(--blue);
+  box-shadow: 0 0 0 3px var(--accent);
   border-radius: var(--radius-link);
 }
-a:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-@media (prefers-color-scheme: dark) {
-  a {
-    color: var(--ink);
-    text-decoration-color: rgba(255, 255, 255, 0.5);
-  }
-}
-
-/* Header block */
-.masthead { margin-bottom: 2rem; }
-.updated {
+/* Masthead */
+.masthead { margin-bottom: 1.75rem; }
+.dateline {
   display: block;
-  margin-top: 0.4rem;
-  font-size: var(--type-small);
+  margin-top: 0.35rem;
   font-family: var(--serif-italic);
   font-style: italic;
-}
-
-.crumb {
-  display: inline-block;
-  margin-bottom: 2.5rem;
   font-size: var(--type-small);
 }
+
+.crumb { display: inline-block; margin-bottom: 2.25rem; font-size: var(--type-small); }
+
+/* The one place the blue carries weight: the line under a field-note title. */
+.standfirst {
+  margin: 0 0 1.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 2px solid var(--accent);
+}
+.standfirst p { margin-bottom: 0.5em; }
+.standfirst p:last-child { margin-bottom: 0; }
+.meta { font-size: var(--type-small); }
+.meta a + a { margin-left: 0.75rem; }
 
 /* Project list */
 .projects { list-style: none; margin: 0; padding: 0; }
@@ -145,31 +161,32 @@ a:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
   grid-template-columns: 1fr auto;
   column-gap: 1.5rem;
   row-gap: 0.15rem;
-  padding: var(--space-row) 0;
+  padding: var(--space-row) 0 1rem;
   border-top: 1px solid var(--rule);
 }
 .projects li:last-child { border-bottom: 1px solid var(--rule); }
 .projects .title { font-weight: 500; }
-.projects .when { font-size: var(--type-small); white-space: nowrap; padding-top: 0.05em; }
-.projects .blurb { grid-column: 1 / -1; margin: 0; }
+.projects .when { font-size: var(--type-small); white-space: nowrap; padding-top: 0.2em; }
+.projects .blurb { grid-column: 1 / -1; margin: 0.15rem 0 0; }
+.projects .blurb a { white-space: nowrap; }
+
+/* An unfinished thing says so in words, in the accent, without a badge. */
 .wip {
   font-family: var(--serif-italic);
   font-style: italic;
-  color: var(--red);
-  margin-left: 0.35em;
+  font-size: var(--type-small);
+  color: var(--accent);
+  margin-left: 0.4em;
 }
-@media (prefers-color-scheme: dark) { .wip { color: var(--ink); } }
+
 @media (max-width: 480px) {
   .projects li { grid-template-columns: 1fr; }
   .projects .when { padding-top: 0; }
 }
 
-/* Long-form pages */
-article > p, article > ul, article > ol, article > pre, article > h2, article > h3 {
-  max-width: var(--measure);
-}
-article ul, article ol { padding-left: 1.25rem; margin: 0 0 1.1em; }
-article li { margin-bottom: 0.35em; }
+/* Long-form */
+article ul, article ol { padding-left: 1.15rem; margin: 0 0 1.1em; }
+article li { margin-bottom: 0.4em; }
 
 pre, code { font-family: var(--code); font-size: var(--type-small); }
 code { background: var(--code-bg); padding: 0.1em 0.35em; border-radius: var(--radius-code); }
@@ -186,21 +203,49 @@ pre code { background: none; padding: 0; font-size: 1em; }
 blockquote {
   margin: 1.5rem 0;
   padding-left: 1rem;
-  border-left: 2px solid var(--blue);
+  border-left: 2px solid var(--accent);
   font-family: var(--serif-italic);
   font-style: italic;
 }
 
-table { border-collapse: collapse; margin: 1.25rem 0; width: 100%; font-size: var(--type-small); }
-th, td { text-align: left; padding: 0.5rem 0.75rem 0.5rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.scroll { overflow-x: auto; margin: 1.25rem 0; }
+table { border-collapse: collapse; width: 100%; font-size: var(--type-small); }
+th, td {
+  text-align: left;
+  padding: 0.45rem 1rem 0.45rem 0;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
 th { font-weight: 500; }
+td.num, th.num { text-align: right; padding-right: 0; }
 
 footer {
   max-width: var(--measure);
-  margin: 4rem auto 0;
-  padding: 1.5rem 1rem 0;
+  margin: var(--space-section) auto 0;
+  padding: 1.5rem 1rem 3rem;
   border-top: 1px solid var(--rule);
   font-size: var(--type-small);
 }
-@media (max-width: 768px) { footer { padding: 1.5rem 1.25rem 0; } }
+@media (max-width: 768px) { footer { padding: 1.5rem 1.25rem 3rem; } }
 footer p { margin: 0; }
+
+/* Theme toggle. Text, not an icon, because the rest of the site is words. */
+#theme-toggle {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 10;
+  font: inherit;
+  font-size: var(--type-small);
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-link);
+  padding: 0.3rem 0.65rem;
+  cursor: pointer;
+  transition: color var(--motion-hover) ease, background-color var(--motion-hover) ease,
+    border-color var(--motion-hover) ease;
+}
+#theme-toggle:hover { color: var(--on-accent); background: var(--accent); border-color: var(--accent); }
+#theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 480px) { #theme-toggle { top: 0.75rem; right: 0.75rem; } }

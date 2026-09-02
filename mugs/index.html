@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mug Shelf</title>
+  <meta name="description" content="Field notes on indexing 36 ceramic mugs, cutting each one out with the macOS Vision framework, and a shelf you can arrange.">
+  <script>
+    // Apply the stored theme before first paint, so the page never flashes the
+    // other one. Everything else about the toggle lives in site.js.
+    try { var t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t } catch (e) {}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;1,400&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main>
+    <a class="crumb" href="/">Index</a>
+    <article>
+      <header class="masthead">
+        <h1>Mug Shelf</h1>
+        <span class="dateline">Field notes, July 2026</span>
+      </header>
+
+      <div class="standfirst">
+        <p>Thirty-six mugs across fourteen makers, and a shelf you can arrange and export.</p>
+        <p class="meta"><a href="https://fun-mugs.vercel.app/">Visit the site</a><a href="https://github.com/thejenniferfang/mugs">Source</a></p>
+      </div>
+
+      <p>I drink from the same two mugs and keep buying more, which is a hobby with a storage problem rather than a taste problem. The index came first, as a way to see the whole collection at once and stop buying the mug I already own in a different glaze. It is built after <a href="https://www.naturalselection.so/">naturalselection.so</a> and <a href="https://curated.supply">curated.supply</a>, which both understood that a catalogue of objects should look like the objects and not like a store.</p>
+
+      <p>Thirty-six mugs, fourteen makers, from Heath and Hasami to smaller studios like Erin Louis and Olivia Ko.</p>
+
+      <h2>Cutting out thirty-six mugs</h2>
+
+      <p>Product photography is white backgrounds and drop shadows. Put forty of those in a grid and you have made a store page. Every mug on the site is a background-removed cutout instead, so what you see is the object with nothing behind it.</p>
+
+      <p>Doing that by hand thirty-six times was not going to happen, so I wrote a small tool around the macOS Vision framework. It is about a hundred lines of Objective-C and it does the subject isolation locally, with no service and no upload.</p>
+
+<pre><code>./tools/cutout images/heath/coupe.jpg cutouts/heath/coupe.png</code></pre>
+
+      <p>The flags it grew are a record of what kept going wrong. There is an alpha-only mode for sources that arrived transparent and needed cropping rather than masking. There is a crop mode for isolating one mug out of a photograph of six. And there is a full mode that skips the auto-crop entirely, which exists solely for the shelf image: crop it to its contents and every compartment coordinate in the drag-and-drop code silently points at the wrong place.</p>
+
+      <h2>The shelf</h2>
+
+      <p>The second page is a Sætter 15, and you drag mugs into its compartments and export the arrangement as a PNG. The arrangement persists in local storage, so the shelf is still yours when you come back.</p>
+
+      <p>This is the part people actually use, and it is the part I nearly did not build. An index answers <em>what do I own</em>. A shelf answers <em>what would this look like</em>, which is the question that was making me buy things.</p>
+
+      <h2>Four of the names are guesses</h2>
+
+      <p>Some mugs came out of photographs where nobody wrote down the maker. I matched those on form and glaze, and four of the attributions are my best reading rather than something I can point to a source for. They are marked as such in the data. A collection that quietly presents a guess as a fact is worth less than one that admits to four soft entries out of thirty-six.</p>
+
+      <h2>On handwriting</h2>
+
+      <p>The site is set in a font built from my own handwriting. It is the right register for the subject: this is a list of cups, not a catalogue raisonné, and setting it in something neutral and correct would have made it read as more serious than it is. The type is doing the job a disclaimer would otherwise have to do.</p>
+    </article>
+  </main>
+
+  <footer>
+    <p><a href="/">Back to the index</a></p>
+  </footer>
+  <script src="/site.js" defer></script>
+</body>
+</html>

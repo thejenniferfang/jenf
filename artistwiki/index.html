@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>artistwiki</title>
+  <meta name="description" content="Field notes on an auction extension that shows what a maker's comparable work sold for, and the image-matching experiment that failed first.">
+  <script>
+    // Apply the stored theme before first paint, so the page never flashes the
+    // other one. Everything else about the toggle lives in site.js.
+    try { var t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t } catch (e) {}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;1,400&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main>
+    <a class="crumb" href="/">Index</a>
+    <article>
+      <header class="masthead">
+        <h1>artistwiki</h1>
+        <span class="dateline">Field notes, August 2026, in progress</span>
+      </header>
+
+      <div class="standfirst">
+        <p>Hover any auction lot to see who made it and what their comparable work has actually sold for.</p>
+        <p class="meta">Chrome extension, not yet released</p>
+      </div>
+
+      <p>I look at a lot of auction catalogues. The listing tells you the estimate, and the estimate is the house's opinion, and there is no way to check it from inside the page you are reading. Everything you would need is public and none of it is where you are.</p>
+
+      <p>artistwiki is a browser extension that fills that in. Hover an underlined lot on Clars, Michaan's, John Moran, Bonhams, Invaluable or LiveAuctioneers and a panel tells you who the maker is, drawn from Wikipedia, Wikidata and the Getty union list of artist names, and what their comparable work has sold for, from 1,439 makers and their realized prices. Then it says whether this lot's estimate sits above or below that band.</p>
+
+      <p>It deliberately does not tell you what the thing in front of you is worth. That restraint is the whole product, and I only arrived at it by building the other version first and watching it fail.</p>
+
+      <h2>The version that failed</h2>
+
+      <p>The original idea was visual. Find the lots that look like this one, see what they sold for, and you have a price. To test it properly I crawled six years of one auction house: 17,596 artworks, embedded with a vision model, joined to 39,092 realized prices. Then for every lot by an artist with a sales history, three ways to guess the hammer price.</p>
+
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Method</th><th class="num">Median error</th><th class="num">Within 2x</th></tr></thead>
+          <tbody>
+            <tr><td>Guess the global median</td><td class="num">61%</td><td class="num">84%</td></tr>
+            <tr><td>Guess this artist's median</td><td class="num">58%</td><td class="num">77%</td></tr>
+            <tr><td>Visual comps within the artist</td><td class="num">58%</td><td class="num">75%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Visual similarity adds nothing. The same median error as ignoring the image entirely, slightly worse at landing within a factor of two, and it beats the plain artist median on only 40% of lots. That holds at one, three and five neighbours, and for artists with five or ten prior sales. It is not a tuning problem.</p>
+
+      <p>And there is a ceiling no better model gets past. The corpus holds 639 pairs whose images are effectively identical, the same work re-offered or another impression of the same print. Hand a perfect visual matcher the same picture twice and the prices still disagree by a median factor of 1.71, and by more than four times on a quarter of the pairs. The clearest case is one Anita Wolff still life, the same photograph, sold in July and again in August. One realized $50. The other is recorded at $40,000, which is almost certainly a misread of $40, and that is the point: an image model cannot tell those two apart, because visually there is nothing to tell apart.</p>
+
+      <p>Price is driven by size, period, subject, condition, provenance and attribution tier. A catalogue thumbnail carries none of them.</p>
+
+      <h2>What that changed</h2>
+
+      <p>So the extension shows evidence and lets you draw the conclusion. It is a smaller promise and it is one the data supports.</p>
+
+      <h3>A maker's name is not a comp</h3>
+
+      <p>Eames designed a leg splint, a lounge chair, a folding screen and a toy elephant. Splints ran $64 to $760 and lounge chairs $320 to $2,800, so a single artist-wide median made an $800 splint estimate look cheap when it was aggressive. Comps match on object type now. Prints and unique works are counted separately for the same reason: a Dali print medians $280 in this data, and a unique Dali made $14,400.</p>
+
+      <h3>Attribution tiers are parsed</h3>
+
+      <p>"Manner of Milo Baughman" is not a Baughman, and the panel says so instead of quoting his prices at you.</p>
+
+      <h3>The prices are OCR'd, so they are audited</h3>
+
+      <p>The audit works in log space with deliberately asymmetric thresholds, because auction prices have a long right tail and no left tail. A high outlier is usually a real result. A low one is usually damage. 1,282 lots are quarantined rather than deleted.</p>
+
+      <h2>Two things that cost me an afternoon each</h2>
+
+      <p>The panel lives in a shadow root. Injected plainly it inherits the host page's CSS, and Michaan's styles its footer blue, which bled straight through.</p>
+
+      <p>And the computed font family cannot tell you a font loaded. It reports the declared stack either way, so a panel with a missing face looks correct to every check except your eyes. The document fonts API is the one that actually knows.</p>
+
+      <h2>Where it stands</h2>
+
+      <p>It works, on six sites, with no backend and no API keys. The artist index ships inside the extension, so nothing about what you browse leaves your machine, and only the background lookup for the name you hovered touches the network. What is left is the part that is not code: the index covers two auction houses well and everything else thinly, and I would rather ship it narrow and say so than have it answer confidently about a maker it has three sales for.</p>
+    </article>
+  </main>
+
+  <footer>
+    <p><a href="/">Back to the index</a></p>
+  </footer>
+  <script src="/site.js" defer></script>
+</body>
+</html>

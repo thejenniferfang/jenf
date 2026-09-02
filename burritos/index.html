@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bay Burrito Challenge</title>
+  <meta name="description" content="Field notes on turning a TikTok archive of Bay Area burritos into a tier list, a map, and a set of frames picked by hand.">
+  <script>
+    // Apply the stored theme before first paint, so the page never flashes the
+    // other one. Everything else about the toggle lives in site.js.
+    try { var t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t } catch (e) {}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;1,400&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main>
+    <a class="crumb" href="/">Index</a>
+    <article>
+      <header class="masthead">
+        <h1>Bay Burrito Challenge</h1>
+        <span class="dateline">Field notes, August 2026</span>
+      </header>
+
+      <div class="standfirst">
+        <p>Forty burritos across the Bay, ranked, mapped, and photographed out of video.</p>
+        <p class="meta"><a href="https://bayburrito.vercel.app/">Visit the site</a><a href="https://github.com/thejenniferfang/bayburrito">Source</a></p>
+      </div>
+
+      <p>The ranking is not mine. It belongs to <a href="https://www.tiktok.com/@fluffie.donut">@fluffie.donut</a>, who has been eating her way across the Bay on camera for long enough that the archive is a real dataset and not a bit. What was missing was any way to use it. A tier list lives in someone's head and in forty separate videos, and neither of those tells you what to eat tonight in Redwood City.</p>
+
+      <p>So the site is a reading of her archive. Her caption sits under each burrito with the hashtags stripped, because a caption written the day of is better evidence than a summary I would write a year later. My own scores sit next to hers where I have actually eaten the thing.</p>
+
+      <h2>There are no photographs of a burrito</h2>
+
+      <p>A restaurant has product photos. A burrito filmed on a phone in a parking lot does not, and there is no version of this site that works without a picture of each one.</p>
+
+      <p>So the pipeline goes and gets them. It downloads each video, cuts frames at 20, 35, 50, 65 and 80 percent of the duration to skip the intro and the sign-off, lays every candidate out as a contact sheet, and then I pick one by hand. Automatic selection was the obvious next step and I never built it, because the thing that makes a frame usable is whether the burrito is open and in focus at the moment the hand pulls back, and I could judge forty of those in about ten minutes.</p>
+
+      <p>The picks are written back into the data file by a script, and the file's first line says not to hand-edit it. That line exists because I hand-edited it and lost the change on the next run.</p>
+
+      <h2>Nobody gets an F</h2>
+
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Tier</th><th class="num">Burritos</th></tr></thead>
+          <tbody>
+            <tr><td>S</td><td class="num">4</td></tr>
+            <tr><td>A</td><td class="num">9</td></tr>
+            <tr><td>B</td><td class="num">14</td></tr>
+            <tr><td>C</td><td class="num">12</td></tr>
+            <tr><td>D</td><td class="num">1</td></tr>
+            <tr><td>F</td><td class="num">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>The distribution bulges at B and stops before the bottom. That is not generosity, it is what the data is: you do not drive to Santa Cruz and film the burrito you would not finish. Every ranked list assembled from published content has this shape, and the honest thing is to show the empty F row rather than rescale the tiers until the curve looks normal.</p>
+
+      <p>S tier is four, and El Farolito on Mission is one of them. The caption reads <em>best. burrito. ever.</em></p>
+
+      <h2>Four ways to look at forty things</h2>
+
+      <p>The same forty burritos are a tier list, a map of the Bay, a notebook, and a lazy susan you spin. Four views of one dataset is usually a design failure, an author who could not decide. Here each one answers a different question. The tier list is <em>what is best</em>. The map is <em>what is near me</em>, which is the question that actually gets someone into a car. The notebook is <em>what did she say about it</em>. The lazy susan is not a question at all, it is the one that makes you keep going.</p>
+
+      <p>San Francisco has nine, Berkeley six, Redwood City five. The peninsula is better represented than the tier list suggests, which you only find out by switching to the map.</p>
+
+      <h2>What I would change</h2>
+
+      <p>The scrape works through video pages one at a time. The profile grid needs cookies or a paid scraper, so adding a new burrito means pasting an id into a text file rather than pointing the pipeline at her account and letting it catch up. That is the difference between a site that is current and a site that was current in August.</p>
+    </article>
+  </main>
+
+  <footer>
+    <p><a href="/">Back to the index</a></p>
+  </footer>
+  <script src="/site.js" defer></script>
+</body>
+</html>

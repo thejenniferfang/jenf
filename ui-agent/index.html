@@ -4,7 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ui-agent</title>
-  <meta name="description" content="ui-agent: edit design tokens live in the browser, write the change back to your stylesheet, and audit alignment and type. Dev only.">
+  <meta name="description" content="Field notes on ui-agent: a dev-only panel that edits design tokens in the browser, writes the change back to source, and audits alignment and type.">
+  <script>
+    // Apply the stored theme before first paint, so the page never flashes the
+    // other one. Everything else about the toggle lives in site.js.
+    try { var t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t } catch (e) {}
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;1,400&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
@@ -13,22 +18,26 @@
 <body>
   <main>
     <a class="crumb" href="/">Index</a>
-
     <article>
       <header class="masthead">
         <h1>ui-agent</h1>
-        <span class="updated">July 2026, still in progress</span>
+        <span class="dateline">Field notes, July 2026, in progress</span>
       </header>
 
-      <p>ui-agent is a small panel you mount in a React app during development. It lets you edit design tokens live in the browser, then writes the change back to your stylesheet. It also looks at the page for the things that are almost right, which is the category the eye reads as sloppy without being able to name, and turns them into a brief a coding agent can act on.</p>
+      <div class="standfirst">
+        <p>A dev-only panel that edits design tokens in the browser and writes the change back to your stylesheet.</p>
+        <p class="meta">React package, not yet published</p>
+      </div>
 
-      <p>Most token editors are runtime knobs. You tweak a value, you like it, and then you go find the file and type it in again by hand. This one closes that loop. It also keeps the values you rejected, which turn out to be the more useful half of the record.</p>
+      <p>This came out of doing design engineering with a coding agent all day. The loop that kept costing me time was not the big changes, it was the last two pixels. I would ask for a radius, look at it, know it was wrong, and then have to say something like <em>a little tighter</em> and wait to see what that meant to somebody else. The knowledge was in my eyes and the file was somewhere else and the agent was in between.</p>
 
-      <p>The code is on <a href="https://github.com/thejenniferfang/ui-agent">GitHub</a>. It is published as <code>@jenfang/ui-agent</code>.</p>
+      <p>Token editors solve half of that. You get sliders, you find the value you like, and then you go open the file and type it in by hand, which means the panel and the source disagree for as long as it takes you to remember. ui-agent closes that loop: the slider writes to the stylesheet. It also keeps the values you rejected, which turned out to be the more useful half of the record.</p>
+
+      <p>It is three tools that share a panel. One edits tokens. One audits the page for the things that are almost right, which is the category the eye reads as sloppy without being able to name. And one turns what you dragged into place by hand into a brief an agent can act on.</p>
 
       <h2>Tokens</h2>
 
-      <p>Each group of tokens becomes a section of sliders. Units come from the token values themselves, so a radius group slides in pixels and a motion group slides in milliseconds. The groups are read from a DTCG-style manifest where every token records the custom property that controls it.</p>
+      <p>Each group of tokens becomes a section of sliders, and the units come from the values, so a radius group slides in pixels and a motion group slides in milliseconds. The groups are read from a manifest where every token records the custom property that controls it.</p>
 
 <pre><code>{
   "radius": {
@@ -41,31 +50,26 @@
   }
 }</code></pre>
 
-      <p>The variable is the required part. It is what makes an edit unambiguous: the panel sets that property at runtime, and the writer changes that exact declaration in your stylesheet. The utilities list is optional and only displayed, so you can see the blast radius of a change before you make it.</p>
+      <p>The variable is the required part. It is what makes an edit unambiguous: the panel sets that property at runtime and the writer changes that exact declaration in the file. The utilities list is only displayed, so you can see the blast radius of a change before you make it.</p>
 
       <h3>The decision log</h3>
 
-      <p>Every apply and every reset appends one line to a log. A reverted entry never touches the stylesheet. It exists because the value someone tried and threw away, plus the reason, says more about a design system than the value that happened to stick. Read a few weeks of this and the house style is written down whether anyone meant to write it or not.</p>
+      <p>Every apply and every reset appends one line. A reverted entry never touches the stylesheet.</p>
 
 <pre><code>{"action":"applied","edits":[{"token":"radius.soft","from":"4px","to":"8px"}],
  "note":"4px reads too soft next to the 2px data surfaces"}
 {"action":"reverted","edits":[{"token":"radius.soft","from":"8px","to":"16px"}],
  "note":"way too round, looks like a consumer app not a data tool"}</code></pre>
 
+      <p>This is the part I would keep if I had to throw the rest away. The value that stuck is in the stylesheet already and anyone can read it. The value someone tried and threw away, plus the reason, is nowhere, and it is the thing that actually explains a design system. Read a few weeks of this log and the house style is written down whether or not anybody meant to write it.</p>
+
       <h3>What it refuses to do</h3>
 
-      <p>An HTTP endpoint that edits source deserves guards. A variable name that is not a plain custom property is rejected. A value that is not a bare CSS length is rejected. And a declaration whose value is itself a <code>var(...)</code> is refused, because in a Tailwind theme block those aliases are what hold a scale together. Overwriting one with a literal would silently flatten the scale, so the writer only ever touches declarations that already hold a literal value.</p>
-
-      <h2>Inspect</h2>
-
-      <p>Click any element to see what its radius resolves to and whether a token owns it, or whether it is hardcoded. It also checks the concentric radius rule on the element's parent: inner radius should equal outer radius minus padding, so the padding reads as optically even around the corner.</p>
-
-<pre><code>16 − 8 = 8
-Drift. Inner radius is 0px, should be 8px.</code></pre>
+      <p>An HTTP endpoint that edits your source deserves guards. A variable name that is not a plain custom property is rejected. A value that is not a bare CSS length is rejected. And a declaration whose value is itself another variable is refused, because in a Tailwind theme block those aliases are what hold a scale together, and overwriting one with a literal would flatten the scale silently.</p>
 
       <h2>Align</h2>
 
-      <p>Click a container to check its children. Guide lines are drawn over the page, faint on the edge most items share and hard on the strays.</p>
+      <p>Click a container and it checks the children. Guide lines are drawn over the page, faint on the edge most items share and hard on the strays.</p>
 
 <pre><code>ul
 5 children, 1 clean alignment line
@@ -74,19 +78,21 @@ left edges
 4× 10  ·  1× 12
 2px off. Strays should sit at 10px.</code></pre>
 
-      <p>Five checks run. Near-miss edges, where items nearly agree. Broken rhythm, where gaps run 12, 12, 13, 12. Off-grid values. Padding drift between siblings. And padding asymmetry, where 16px on top sits against 14px on the bottom. A header padded 24 top and 8 bottom is a shape someone chose; 16 and 14 is a typo.</p>
+      <p>Five checks run: near-miss edges, broken rhythm, off-grid spacing, padding drift between siblings, and padding asymmetry. All five are tuned by the same idea, that a big difference is a decision and a small one is a mistake. A header padded 24 on top and 8 on the bottom is a shape someone chose. 16 and 14 is a typo.</p>
 
-      <p>Switching to the whole page checks alignment between components rather than inside one container. It finds <em>spines</em>, edges that several elements share exactly, and reports anything sitting near a spine without landing on it. This is deliberately not a comparison of every element to every other element. Across unrelated components almost any pair lands within a few pixels of something, so that approach produces noise instead of findings. Anchoring to a line the page already committed to is what makes a cross-component result mean anything.</p>
+      <p>Switched to the whole page, it looks for <em>spines</em>, edges several elements share exactly, and reports what sits near one without landing on it. This is deliberately not a comparison of every element to every other. Across unrelated components almost any pair lands within a few pixels of something, so that version produces noise instead of findings. Anchoring to a line the page already committed to is what makes a cross-component result mean anything.</p>
 
-      <p>Two things look like misses and are not. A card with a one-pixel border holds its rows one pixel inside its own edge, and moving them would push them onto the border. And two real lines a pixel apart are two lines, not one line and six strays. Both are counted and set aside, and the counts are always shown. A check that quietly discards most of what it found is indistinguishable from one that found nothing.</p>
+      <p>Two things look like misses and are not, and getting them wrong is the difference between a check people keep open and one they switch off. A card with a one-pixel border holds its rows one pixel inside its own edge, and "move it 1px right" would push them onto the border. And two real lines a pixel apart are two lines, not one line and six strays. Both are counted and set aside, and the counts are always shown, because a check that quietly discards most of what it found is indistinguishable from one that found nothing.</p>
 
-      <p>When no value holds a majority, it says so rather than picking one. Two items two pixels apart are misaligned, but nothing says which one moved. Naming a target there would be a guess dressed up as a finding.</p>
+      <p>When no value holds a majority it says so rather than picking one. Two items two pixels apart are misaligned, but nothing says which one moved, and naming a target there would be a guess dressed up as a finding.</p>
 
       <h3>Nudge</h3>
 
-      <p>Audit is the tool telling you what is wrong, and that is always a guess about intent. Nudge is the other direction: you tell the tool. Every line the page commits to is drawn, including the ones nothing misses. Click an element to pick it up, drag it or use the arrow keys, and an edge within six pixels of a line sticks to it. Nothing about the page changes. The move is a transform, so layout, scroll height and every sibling stay exactly where they were.</p>
+      <p>Audit is the tool telling you what is wrong, which is always a guess about intent. Nudge is the other direction. Every line the page commits to is drawn, including the ones nothing misses, since those are the lines you would want to land on. Pick an element up, drag it or use the arrow keys, and an edge within six pixels of a line sticks to it.</p>
 
-      <p>Copy feedback turns the moves into a brief, with both positions given rather than a delta, so the agent can check the claim against the layout instead of trusting a number.</p>
+      <p>Nothing about the page changes while you do this. The move is a transform, so layout, scroll height and every sibling stay where they were, and one drag cannot cascade into a reflow that invalidates the lines you are measuring against.</p>
+
+      <p>Copy feedback turns the moves into a brief. Both positions are given rather than a delta, so the agent can check the claim against the layout instead of trusting a number.</p>
 
 <pre><code>I dragged 2 elements into position by hand. The positions below are the
 intended result, not the implementation. Change whichever padding, gap,
@@ -97,9 +103,11 @@ margin or grid value produces them. Do not add a transform to hit the number.
    lands on the right line at 1228px, which 7 elements share
    rendered by Segmented · components/segmented.tsx:24</code></pre>
 
+      <p>The warning at the top of that brief is not decoration. A pixel delta invites the nearest way to produce it, which is a transform, and the result would look right and be wrong, because it moves the element in the paint and not in the layout.</p>
+
       <h2>Type</h2>
 
-      <p>Censuses every rendered text size and weight, then flags what is off your scale or spaced too finely to read as steps. A page using 10, 11, 12, 13, 14 and 15 has one problem, a ramp finer than the eye reads as steps, not five separate ones.</p>
+      <p>It censuses every rendered size and weight, then flags what is off your scale or spaced too finely to read as steps.</p>
 
 <pre><code>Sizes in use
 13px × 11  off-scale
@@ -110,41 +118,25 @@ margin or grid value produces them. Do not add a transform to hit the number.
 Ramp too fine to read as steps
 6 sizes inside 5px.</code></pre>
 
-      <p>House rules can be switched on. One of them flags monospace text that is also uppercased. Mono already signals machine; uppercasing it costs legibility without adding meaning.</p>
+      <p>Runs are collapsed on purpose. A page using 10 through 15 has one problem, not five: a ramp finer than the eye reads as steps. Reporting each adjacent pair buries the finding under its own restatements.</p>
 
-      <h2>Install</h2>
+      <p>One house rule flags monospace text that is also uppercased. Mono already says machine. Uppercasing it costs legibility and adds nothing.</p>
 
-<pre><code>npm install @jenfang/ui-agent</code></pre>
+      <h2>Dogfooding it here</h2>
 
-      <p>React 18 or 19 is a peer dependency. Mount it once, gated to development, and pass the tokens you want to expose.</p>
+      <p>This site runs the panel in local development, which is how the type on it got fixed. The first audit found small text at 15.2 pixels sitting 1.8 below the 17 pixel body, close enough that it read as an accident rather than a step. I moved it to 14 from inside the panel, wrote the reason in the note field, and the write-back put it in the stylesheet and the reason in the log.</p>
 
-<pre><code>import { groupFromManifest, UiAgent } from "@jenfang/ui-agent"
-import manifest from "@/design-tokens.generated.json"
+      <p>It also turned up a bug in the panel itself. Apply cleared the runtime override so the page would render from the file, except the browser is still holding the stylesheet it loaded, so the page snapped back to the old value while the panel reported success. Applied edits are now promoted to committed for the session. That is the argument for dogfooding in one paragraph: nothing in the test suite could have found it, because the bug only exists when the file and the loaded document disagree.</p>
 
-const groups = [
-  groupFromManifest(manifest, "radius", { min: 0, max: 24, step: 1 }),
-  groupFromManifest(manifest, "motion", { min: 0, max: 600, step: 10 }),
-]
+      <h2>Where it stands</h2>
 
-export function UiAgentProvider() {
-  if (process.env.NODE_ENV !== "development") return null
-  return (
-    &lt;UiAgent
-      groups={groups}
-      endpoint="/api/ui-agent"
-      source="app/globals.css"
-    /&gt;
-  )
-}</code></pre>
-
-      <p>The endpoint is yours to mount, so the package does not depend on your framework. It writes to tracked source files, so gate it to development.</p>
-
-      <p>This is a v1 and it is still moving. The full write-up, including the parts about how the panel is drawn and why the orb stays dark in both themes, is in the <a href="https://github.com/thejenniferfang/ui-agent#readme">README</a>.</p>
+      <p>It is a v1 and it is not published yet. It runs in two of my own projects and it has changed how I work in both, which is a lower bar than shipping but the right one for deciding whether to keep going.</p>
     </article>
   </main>
 
   <footer>
     <p><a href="/">Back to the index</a></p>
   </footer>
+  <script src="/site.js" defer></script>
 </body>
 </html>
