@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ui-agent</title>
+  <meta name="description" content="ui-agent: edit design tokens live in the browser, write the change back to your stylesheet, and audit alignment and type. Dev only.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;1,400&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main>
+    <a class="crumb" href="/">Index</a>
+
+    <article>
+      <header class="masthead">
+        <h1>ui-agent</h1>
+        <span class="updated">July 2026, still in progress</span>
+      </header>
+
+      <p>ui-agent is a small panel you mount in a React app during development. It lets you edit design tokens live in the browser, then writes the change back to your stylesheet. It also looks at the page for the things that are almost right, which is the category the eye reads as sloppy without being able to name, and turns them into a brief a coding agent can act on.</p>
+
+      <p>Most token editors are runtime knobs. You tweak a value, you like it, and then you go find the file and type it in again by hand. This one closes that loop. It also keeps the values you rejected, which turn out to be the more useful half of the record.</p>
+
+      <p>The code is on <a href="https://github.com/thejenniferfang/ui-agent">GitHub</a>. It is published as <code>@jenfang/ui-agent</code>.</p>
+
+      <h2>Tokens</h2>
+
+      <p>Each group of tokens becomes a section of sliders. Units come from the token values themselves, so a radius group slides in pixels and a motion group slides in milliseconds. The groups are read from a DTCG-style manifest where every token records the custom property that controls it.</p>
+
+<pre><code>{
+  "radius": {
+    "soft": {
+      "$type": "dimension",
+      "$value": "4px",
+      "$variable": "--radius-soft",
+      "$utilities": ["rounded-soft"]
+    }
+  }
+}</code></pre>
+
+      <p>The variable is the required part. It is what makes an edit unambiguous: the panel sets that property at runtime, and the writer changes that exact declaration in your stylesheet. The utilities list is optional and only displayed, so you can see the blast radius of a change before you make it.</p>
+
+      <h3>The decision log</h3>
+
+      <p>Every apply and every reset appends one line to a log. A reverted entry never touches the stylesheet. It exists because the value someone tried and threw away, plus the reason, says more about a design system than the value that happened to stick. Read a few weeks of this and the house style is written down whether anyone meant to write it or not.</p>
+
+<pre><code>{"action":"applied","edits":[{"token":"radius.soft","from":"4px","to":"8px"}],
+ "note":"4px reads too soft next to the 2px data surfaces"}
+{"action":"reverted","edits":[{"token":"radius.soft","from":"8px","to":"16px"}],
+ "note":"way too round, looks like a consumer app not a data tool"}</code></pre>
+
+      <h3>What it refuses to do</h3>
+
+      <p>An HTTP endpoint that edits source deserves guards. A variable name that is not a plain custom property is rejected. A value that is not a bare CSS length is rejected. And a declaration whose value is itself a <code>var(...)</code> is refused, because in a Tailwind theme block those aliases are what hold a scale together. Overwriting one with a literal would silently flatten the scale, so the writer only ever touches declarations that already hold a literal value.</p>
+
+      <h2>Inspect</h2>
+
+      <p>Click any element to see what its radius resolves to and whether a token owns it, or whether it is hardcoded. It also checks the concentric radius rule on the element's parent: inner radius should equal outer radius minus padding, so the padding reads as optically even around the corner.</p>
+
+<pre><code>16 − 8 = 8
+Drift. Inner radius is 0px, should be 8px.</code></pre>
+
+      <h2>Align</h2>
+
+      <p>Click a container to check its children. Guide lines are drawn over the page, faint on the edge most items share and hard on the strays.</p>
+
+<pre><code>ul
+5 children, 1 clean alignment line
+
+left edges
+4× 10  ·  1× 12
+2px off. Strays should sit at 10px.</code></pre>
+
+      <p>Five checks run. Near-miss edges, where items nearly agree. Broken rhythm, where gaps run 12, 12, 13, 12. Off-grid values. Padding drift between siblings. And padding asymmetry, where 16px on top sits against 14px on the bottom. A header padded 24 top and 8 bottom is a shape someone chose; 16 and 14 is a typo.</p>
+
+      <p>Switching to the whole page checks alignment between components rather than inside one container. It finds <em>spines</em>, edges that several elements share exactly, and reports anything sitting near a spine without landing on it. This is deliberately not a comparison of every element to every other element. Across unrelated components almost any pair lands within a few pixels of something, so that approach produces noise instead of findings. Anchoring to a line the page already committed to is what makes a cross-component result mean anything.</p>
+
+      <p>Two things look like misses and are not. A card with a one-pixel border holds its rows one pixel inside its own edge, and moving them would push them onto the border. And two real lines a pixel apart are two lines, not one line and six strays. Both are counted and set aside, and the counts are always shown. A check that quietly discards most of what it found is indistinguishable from one that found nothing.</p>
+
+      <p>When no value holds a majority, it says so rather than picking one. Two items two pixels apart are misaligned, but nothing says which one moved. Naming a target there would be a guess dressed up as a finding.</p>
+
+      <h3>Nudge</h3>
+
+      <p>Audit is the tool telling you what is wrong, and that is always a guess about intent. Nudge is the other direction: you tell the tool. Every line the page commits to is drawn, including the ones nothing misses. Click an element to pick it up, drag it or use the arrow keys, and an edge within six pixels of a line sticks to it. Nothing about the page changes. The move is a transform, so layout, scroll height and every sibling stay exactly where they were.</p>
+
+      <p>Copy feedback turns the moves into a brief, with both positions given rather than a delta, so the agent can check the claim against the layout instead of trusting a number.</p>
+
+<pre><code>I dragged 2 elements into position by hand. The positions below are the
+intended result, not the implementation. Change whichever padding, gap,
+margin or grid value produces them. Do not add a transform to hit the number.
+
+1. div.pg-seg-item, 3px right and 1px up
+   from left 1225, top 33 (145×28) to left 1228, top 32
+   lands on the right line at 1228px, which 7 elements share
+   rendered by Segmented · components/segmented.tsx:24</code></pre>
+
+      <h2>Type</h2>
+
+      <p>Censuses every rendered text size and weight, then flags what is off your scale or spaced too finely to read as steps. A page using 10, 11, 12, 13, 14 and 15 has one problem, a ramp finer than the eye reads as steps, not five separate ones.</p>
+
+<pre><code>Sizes in use
+13px × 11  off-scale
+11px × 2   off-scale
+12px × 2
+10px × 1   off-scale
+
+Ramp too fine to read as steps
+6 sizes inside 5px.</code></pre>
+
+      <p>House rules can be switched on. One of them flags monospace text that is also uppercased. Mono already signals machine; uppercasing it costs legibility without adding meaning.</p>
+
+      <h2>Install</h2>
+
+<pre><code>npm install @jenfang/ui-agent</code></pre>
+
+      <p>React 18 or 19 is a peer dependency. Mount it once, gated to development, and pass the tokens you want to expose.</p>
+
+<pre><code>import { groupFromManifest, UiAgent } from "@jenfang/ui-agent"
+import manifest from "@/design-tokens.generated.json"
+
+const groups = [
+  groupFromManifest(manifest, "radius", { min: 0, max: 24, step: 1 }),
+  groupFromManifest(manifest, "motion", { min: 0, max: 600, step: 10 }),
+]
+
+export function UiAgentProvider() {
+  if (process.env.NODE_ENV !== "development") return null
+  return (
+    &lt;UiAgent
+      groups={groups}
+      endpoint="/api/ui-agent"
+      source="app/globals.css"
+    /&gt;
+  )
+}</code></pre>
+
+      <p>The endpoint is yours to mount, so the package does not depend on your framework. It writes to tracked source files, so gate it to development.</p>
+
+      <p>This is a v1 and it is still moving. The full write-up, including the parts about how the panel is drawn and why the orb stays dark in both themes, is in the <a href="https://github.com/thejenniferfang/ui-agent#readme">README</a>.</p>
+    </article>
+  </main>
+
+  <footer>
+    <p><a href="/">Back to the index</a></p>
+  </footer>
+</body>
+</html>
