@@ -82,6 +82,10 @@ const panel = `
       token("code", "--radius-code", "px", ["code", "pre"]),
       token("link", "--radius-link", "px", ["a:hover"]),
     ]},
+    { name: "type", min: 12, max: 20, step: 0.5, tokens: [
+      token("body", "--type-body", "px", ["body"]),
+      token("small", "--type-small", "px", [".updated", ".when", ".crumb", "footer", "table"]),
+    ]},
     { name: "motion", min: 0, max: 600, step: 10, tokens: [
       token("hover", "--motion-hover", "ms", ["a"]),
     ]},
@@ -95,7 +99,7 @@ const panel = `
       source: "style.css",
       sourceEndpoint: null,
       agentEndpoint: ${JSON.stringify(agentEndpoint)},
-      typography: { scale: [15, 16, 17, 24, 32], banMonoUppercase: true },
+      typography: { scale: [14, 17, 24, 32], banMonoUppercase: true },
       alignment: { grid: 2, tolerance: 4 },
     }),
   )

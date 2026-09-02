@@ -20,13 +20,15 @@
 
   /* Editable tokens. ui-agent writes these declarations back from the dev panel,
      so they stay literal values (no var() aliases) in px, rem or ms. */
-  --space-row: 14px;
-  --space-section: 56px;
+  --space-row: 8px;
+  --space-section: 48px;
   --space-page: 80px;
   --space-code: 16px;
   --radius-code: 2px;
   --radius-link: 1px;
   --motion-hover: 120ms;
+  --type-body: 17px;
+  --type-small: 14px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -51,7 +53,7 @@ html {
 body {
   margin: 0;
   font-family: var(--sans);
-  font-size: 17px;
+  font-size: var(--type-body);
   line-height: 1.55;
   font-feature-settings: "tnum" 1;
 }
@@ -125,7 +127,7 @@ a:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
 .updated {
   display: block;
   margin-top: 0.4rem;
-  font-size: 0.95rem;
+  font-size: var(--type-small);
   font-family: var(--serif-italic);
   font-style: italic;
 }
@@ -133,7 +135,7 @@ a:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
 .crumb {
   display: inline-block;
   margin-bottom: 2.5rem;
-  font-size: 0.95rem;
+  font-size: var(--type-small);
 }
 
 /* Project list */
@@ -148,7 +150,7 @@ a:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
 }
 .projects li:last-child { border-bottom: 1px solid var(--rule); }
 .projects .title { font-weight: 500; }
-.projects .when { font-size: 0.95rem; white-space: nowrap; padding-top: 0.05em; }
+.projects .when { font-size: var(--type-small); white-space: nowrap; padding-top: 0.05em; }
 .projects .blurb { grid-column: 1 / -1; margin: 0; }
 .wip {
   font-family: var(--serif-italic);
@@ -190,7 +192,7 @@ blockquote {
   font-size: 1.08em;
 }
 
-table { border-collapse: collapse; margin: 1.25rem 0; width: 100%; font-size: 0.95rem; }
+table { border-collapse: collapse; margin: 1.25rem 0; width: 100%; font-size: var(--type-small); }
 th, td { text-align: left; padding: 0.5rem 0.75rem 0.5rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
 th { font-weight: 500; }
 
@@ -199,7 +201,7 @@ footer {
   margin: 4rem auto 0;
   padding: 1.5rem 1rem 0;
   border-top: 1px solid var(--rule);
-  font-size: 0.95rem;
+  font-size: var(--type-small);
 }
 @media (max-width: 768px) { footer { padding: 1.5rem 1.25rem 0; } }
 footer p { margin: 0; }
