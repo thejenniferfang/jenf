@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wine shelf</title>
+  <meta name="description" content="Field notes on building a drawn cellar that knows what to open next and roughly what the rest is worth.">
+  <script>
+    // Apply the stored theme before first paint, so the page never flashes the
+    // other one. Everything else about the toggle lives in site.js.
+    try { var t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t } catch (e) {}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;1,400&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main>
+    <a class="crumb" href="/">Index</a>
+    <article>
+      <header class="masthead">
+        <h1>Wine shelf</h1>
+        <span class="dateline">Field notes, September 2026</span>
+      </header>
+
+      <div class="standfirst">
+        <p>Forty-one wines, drawn rather than photographed, on a shelf that knows what to open next and roughly what the rest is worth.</p>
+        <p class="meta"><a href="https://mywine.vercel.app/">Visit the site</a></p>
+      </div>
+
+      <p>The note on my phone was called wine. It had producers and years in it and no dates of any other kind, which meant it could tell me what I owned and not whether any of it was still good. That is the only question a cellar actually asks. So this one takes today's date as an input, and every bottle on it reads differently next year without anyone touching the data.</p>
+
+      <p>It is the third of these. The chairs got a room and the mugs got a shelf, and this one gets a rack, a valuation, and a view called tonight.</p>
+
+      <h2>Every bottle has a verb</h2>
+
+      <p>The chairs had a motion field, and it turned out to be the most useful column in the set, so the wine has one too. Its values are what you do with the bottle when you open it.</p>
+
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Verb</th><th>What it asks of you</th><th>For instance</th></tr></thead>
+          <tbody>
+            <tr><td>pour</td><td>Open it and pour, no ceremony</td><td>Côtes du Rhône, Rioja Reserva</td></tr>
+            <tr><td>decant</td><td>An hour or two in a decanter first</td><td>Barolo, Pauillac, Monte Bello</td></tr>
+            <tr><td>swirl</td><td>A big glass and ten minutes of air</td><td>Meursault, Grüner, dry chenin</td></tr>
+            <tr><td>chill</td><td>Forty minutes in the fridge, not an hour</td><td>Riesling, Bandol rosé, manzanilla</td></tr>
+            <tr><td>pop</td><td>Cold, and open it at the table</td><td>Champagne</td></tr>
+            <tr><td>sip</td><td>A small glass, and it keeps for weeks</td><td>Vintage port, tawny</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Hovering a bottle plays its verb. A champagne jumps, a Barolo tilts slowly and holds, a riesling shivers. It is the same trick as the chairs, an invisible person handling the object, and it does the same job: the card tells you how to treat the thing before you have read a word.</p>
+
+      <h2>The bottles are drawn</h2>
+
+      <p>There are no photographs. Every bottle is an SVG built from one of six silhouettes, and the silhouettes are the ones the regions actually ship in. Bordeaux has a square shoulder. Burgundy slopes. Champagne is heavier and wider. The Mosel flute is tall and thin, Provence rosé tapers at the base, and port has a bulge in the neck to catch the sediment. Glass color and capsule color are per wine. The label carries the vintage in my handwriting, and the producer name on it is too small to read on the card and exactly legible when you open the bottle full size, which was not planned and I kept.</p>
+
+      <p>A photo would have been faster and would have meant forty product shots I did not own. Drawing them also made the rack possible, because a rack of ninety-seven bottles is one SVG and exports to a picture with the font embedded.</p>
+
+      <h2>Four words instead of a score</h2>
+
+      <p>Each wine carries three numbers, years after the vintage: when it opens, when it peaks, when it closes. From those and today's date every bottle gets one of four words. <em>Hold</em> is before the window opens. <em>Ready</em> is inside it. <em>Drink up</em> is the last forty percent of the stretch after the peak, where every year now costs something. <em>Past</em> is after it closes, and the honest advice becomes cook with it.</p>
+
+      <p>Two bottles on the seeded shelf are past. One is a Bourgogne Blanc I held for eight years by accident. It is the bottle the site was built to find.</p>
+
+      <h2>The prices are estimates and the site says so</h2>
+
+      <p>Every card has a dollar figure and none of them is a quote. Release price is roughly what the bottle cost when it came out. Market price is roughly what the vintage trades for now, looked up by hand rather than pulled from a feed. Projections come from a model small enough to state in one paragraph: two percent base drift, just under one percent per critic point above 92, and a maturity term that is positive while the market waits for the wine to open, flat inside the window, and negative after it. Anything under forty dollars gets a quarter of that, because a nineteen dollar Côtes du Rhône does not have a secondary market no matter what a spreadsheet says.</p>
+
+      <p>The chairs put their caveat in a comment at the top of the data file. This one does that too and adds a panel in the sidebar, because a number with a dollar sign reads as a measurement even harder than a score out of five does.</p>
+
+      <h2>Tonight is the point</h2>
+
+      <p>The grid is the index. The view I actually open is tonight. You tap what you are eating, in the words you would use with the fridge open, and it ranks the shelf. Each wine has four dishes in order, so a first-listed match beats a fourth, a bottle that needs drinking soon gets a bump, and nothing on hold or past its window is ever suggested. It is a sommelier in the sense that it protects you from your own cellar. With nothing selected it lists whatever has the least window left, which is the other question I kept asking.</p>
+
+      <h2>The label reader runs in your browser</h2>
+
+      <p>Adding a bottle means pointing a camera at a label. The reading is OCR in the browser, nothing leaves the device, and the words it finds are matched against about a hundred producers the site knows. Then it asks you for the vintage, because it gets the year wrong more often than the name, and a wrong year is a wrong window. What you add lives in local storage, so each browser is its own shelf. That is the smallest version of everyone getting their own cellar, and it was enough to ship.</p>
+
+      <h2>What I would change</h2>
+
+      <p>The market prices should move. They are a snapshot from September and the site would be much better with a feed behind it, even a weekly one. The reader knows a hundred producers and the world has more; the right fix is a real wine database rather than a longer list. And the window assumes proper storage, which is the assumption every wine chart makes and almost no bottle has met. It wants a column for where the bottle actually lived.</p>
+    </article>
+  </main>
+
+  <footer>
+    <p><a href="/">Back to the index</a></p>
+  </footer>
+  <script src="/site.js" defer></script>
+</body>
+</html>
