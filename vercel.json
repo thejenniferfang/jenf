@@ -1,4 +1,11 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/wine",
+      "destination": "/smellier",
+      "permanent": true
+    }
+  ]
 }

@@ -13,6 +13,8 @@
   --ink: #121212;
   --accent: #002fa7;          /* International Klein Blue */
   --on-accent: #ffffff;
+  --link: #002fa7;            /* link text, and the hairlines blue draws */
+  --link-weight: 400;
   --rule: rgba(18, 18, 18, 0.14);
   --code-bg: rgba(18, 18, 18, 0.05);
 
@@ -32,14 +34,18 @@
 }
 
 /* Dark is the charcoal from jenniferfang.com, lightened enough to read a page of
-   text on. Klein blue is unreadable at this contrast, so the accent lifts to a
-   tint of it and the blue itself sits out until the page is white again. */
+   text on. Klein blue stays Klein blue here, but it cannot be the link color:
+   #002FA7 on this charcoal is 1.5:1, which is a link nobody can read. So the
+   dark page goes monochrome, links carry a little weight instead of a color,
+   and the blue comes back the moment you touch one. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --paper: #232326;
     --ink: #f4f3ef;
-    --accent: #9db0ff;
-    --on-accent: #16161a;
+    --accent: #002fa7;
+    --on-accent: #ffffff;
+    --link: #f4f3ef;
+    --link-weight: 500;
     --rule: rgba(255, 255, 255, 0.2);
     --code-bg: rgba(255, 255, 255, 0.07);
   }
@@ -48,8 +54,10 @@
 :root[data-theme="dark"] {
   --paper: #232326;
   --ink: #f4f3ef;
-  --accent: #9db0ff;
-  --on-accent: #16161a;
+  --accent: #002fa7;
+  --on-accent: #ffffff;
+  --link: #f4f3ef;
+  --link-weight: 500;
   --rule: rgba(255, 255, 255, 0.2);
   --code-bg: rgba(255, 255, 255, 0.07);
 }
@@ -114,11 +122,9 @@ em, i { font-family: var(--serif-italic); font-style: italic; }
 strong, b { font-weight: 500; }
 
 a {
-  color: var(--accent);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.18em;
-  text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  color: var(--link);
+  font-weight: var(--link-weight);
+  text-decoration: none;
   transition: color var(--motion-hover) ease, background-color var(--motion-hover) ease,
     box-shadow var(--motion-hover) ease;
 }
@@ -147,7 +153,7 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .standfirst {
   margin: 0 0 1.75rem;
   padding-bottom: 1.25rem;
-  border-bottom: 2px solid var(--accent);
+  border-bottom: 2px solid var(--link);
 }
 .standfirst p { margin-bottom: 0.5em; }
 .standfirst p:last-child { margin-bottom: 0; }
@@ -165,7 +171,7 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
   border-top: 1px solid var(--rule);
 }
 .projects li:last-child { border-bottom: 1px solid var(--rule); }
-.projects .title { font-weight: 500; }
+.projects .title, .projects .title a { font-weight: 500; }
 .projects .when { font-size: var(--type-small); white-space: nowrap; padding-top: 0.2em; }
 .projects .blurb { grid-column: 1 / -1; margin: 0.15rem 0 0; }
 .projects .blurb a { white-space: nowrap; }
@@ -175,7 +181,7 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
   font-family: var(--serif-italic);
   font-style: italic;
   font-size: var(--type-small);
-  color: var(--accent);
+  color: var(--link);
   margin-left: 0.4em;
 }
 
@@ -203,7 +209,7 @@ pre code { background: none; padding: 0; font-size: 1em; }
 blockquote {
   margin: 1.5rem 0;
   padding-left: 1rem;
-  border-left: 2px solid var(--accent);
+  border-left: 2px solid var(--link);
   font-family: var(--serif-italic);
   font-style: italic;
 }
@@ -252,4 +258,4 @@ footer p { margin: 0; }
 
 /* The one icon on the site: a pin before the place I am. */
 .pin { white-space: nowrap; }
-.pin svg { display: inline-block; vertical-align: -1px; margin-right: 0.25em; color: var(--accent); }
+.pin svg { display: inline-block; vertical-align: -1px; margin-right: 0.25em; color: var(--link); }

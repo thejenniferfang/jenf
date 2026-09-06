@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Wine shelf</title>
+  <title>Smellier</title>
   <meta name="description" content="Field notes on building a drawn cellar that knows what to open next and roughly what the rest is worth.">
   <script>
     // Apply the stored theme before first paint, so the page never flashes the
@@ -20,13 +20,13 @@
     <a class="crumb" href="/">Index</a>
     <article>
       <header class="masthead">
-        <h1>Wine shelf</h1>
+        <h1>Smellier</h1>
         <span class="dateline">Field notes, September 2026</span>
       </header>
 
       <div class="standfirst">
         <p>Forty-one wines, drawn rather than photographed, on a shelf that knows what to open next and roughly what the rest is worth.</p>
-        <p class="meta"><a href="https://mywine.vercel.app/">Visit the site</a></p>
+        <p class="meta"><a href="https://smellier.vercel.app/">Visit the site</a></p>
       </div>
 
       <p>The note on my phone was called wine. It had producers and years in it and no dates of any other kind, which meant it could tell me what I owned and not whether any of it was still good. That is the only question a cellar actually asks. So this one takes today's date as an input, and every bottle on it reads differently next year without anyone touching the data.</p>
@@ -58,6 +58,18 @@
       <p>There are no photographs. Every bottle is an SVG built from one of six silhouettes, and the silhouettes are the ones the regions actually ship in. Bordeaux has a square shoulder. Burgundy slopes. Champagne is heavier and wider. The Mosel flute is tall and thin, Provence rosé tapers at the base, and port has a bulge in the neck to catch the sediment. Glass color and capsule color are per wine. The label carries the vintage in my handwriting, and the producer name on it is too small to read on the card and exactly legible when you open the bottle full size, which was not planned and I kept.</p>
 
       <p>A photo would have been faster and would have meant forty product shots I did not own. Drawing them also made the rack possible, because a rack of ninety-seven bottles is one SVG and exports to a picture with the font embedded.</p>
+
+      <h2>The bottles are real now, mostly</h2>
+
+      <p>The first version drew every bottle. Then the shelf became my actual shelf, twenty-five bottles that are mostly Californian and mostly from the years I was not paying attention, and drawings of real bottles felt like a lie. So the site went and found product shots for each one, and a small Vision-framework tool, the same trick as the mug shelf, lifts each bottle off its white background. Two bottles could not be found anywhere online, one of them a homemade label called Talkative Turtle, and those are still drawn. I like that the drawing is now the exception that says <em>nobody photographs this</em>.</p>
+
+      <h2>The rack is the bookcase in my living room</h2>
+
+      <p>Bottles stand up on the shelf, the way they do in my kitchen, in three bays across. The unit around them is the one I sit across from every day: pale birch, and sliding doors in burgundy, black, white and sage that cover some of the bays and leave others open. Click a door and it slides one bay along its track. Whatever it uncovers was there all along, which is also true of the real bookcase.</p>
+
+      <h2>Point it at the whole shelf</h2>
+
+      <p>The label reader started as OCR in the browser, which reads one label at a time and gets the year wrong more often than the name. It is still there as the fallback. With a model connected, a photo of the whole rack goes to Claude once and comes back as a list: every bottle it could read, a vintage, and for anything the site has never heard of, a rough retail price and drink window marked as a guess. A shelf of twenty-five bottles costs a few cents to read. The photo is not stored anywhere, and the page says which of the two readers it used.</p>
 
       <h2>Four words instead of a score</h2>
 
